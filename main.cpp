@@ -1,39 +1,5 @@
 #include <iostream>
 
-void processOption(int option)
-{
-  switch (option)
-    {
-      case 1:
-        std::cout << "Help - your aim is to make money. Analyze the market and make bids and offers." << std::endl;
-        break;
-
-      case 2:
-        std::cout << "Market looks good!" << std::endl;
-        break;
-
-      case 3:
-        std::cout << "Make an offer - enter the amount" << std::endl;
-        break;
-
-      case 4:
-        std::cout << "Make a bid" << std::endl;
-        break;
-
-      case 5:
-        std::cout << "Your wallet is empty." << std::endl;
-        break;
-
-      case 6:
-        std::cout << "Going to next time frame." << std::endl;
-        break;
-      
-      default:
-        std::cout << "Invalid choice. Choose 1-6" << std::endl;
-        break;
-    }
-}
-
 void printMenu()
 {
   // print menu
@@ -49,19 +15,67 @@ void printMenu()
   std::cout << "Type in 1-6" << std::endl;
 }
 
+int selectOption()
+{
+  int userOption;
+  std::cin >> userOption;
+  std::cout << "You chose: " << userOption << std::endl;
+  return userOption;
+}
+
+void printHelp()
+{
+  std::cout << "Help - your aim is to make money. Analyze the market and make bids and offers." << std::endl;
+}
+
+void printExchangeStats()
+{
+  std::cout << "Market looks good!" << std::endl;
+}
+
+void makeOffer()
+{
+  std::cout << "Make an offer - enter the amount" << std::endl;
+}
+
+void makeBid()
+{
+  std::cout << "Make a bid" << std::endl;
+}
+
+void printWallet()
+{
+  std::cout << "Your wallet is empty." << std::endl;
+}
+
+void nextTimeframe()
+{
+  std::cout << "Going to next time frame." << std::endl;
+}
+
+
+
+void processOption(int option)
+{
+  switch (option)
+    {
+      case 1: printHelp(); break;
+      case 2: printExchangeStats(); break;
+      case 3: makeOffer(); break;
+      case 4: makeBid(); break;
+      case 5: std::cout << "Your wallet is empty." << std::endl; break;
+      case 6: std::cout << "Going to next time frame." << std::endl; break;
+      default: std::cout << "Invalid choice. Choose 1-6" << std::endl; break;
+    }
+}
+
 int main()
 {
   while (true)
   {
     printMenu();
-
-    int userOption;
-    std::cin >> userOption;
-    std::cout << "You chose: " << userOption << std::endl;
-
+    int userOption = selectOption();
     processOption(userOption);
-
-    std::cout << std::endl;
   }
 
   return 0;
