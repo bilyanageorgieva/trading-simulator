@@ -2,6 +2,7 @@
 
 #include <vector>
 #include "OrderBookEntry.h"
+#include "OrderBook.h"
 
 class MerkelMain
 {
@@ -22,5 +23,5 @@ class MerkelMain
     int getUserOption();
     void processUserOption(int userOption);
 
-    std::vector<OrderBookEntry> orders;
+    OrderBook orderBook{"trading.csv"};
 };

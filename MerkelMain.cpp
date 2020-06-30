@@ -23,7 +23,6 @@ void MerkelMain::init()
 
 void MerkelMain::loadOrderBook()
 {
-  orders = CSVReader::readCSV("trading.csv");
 }
 
 void MerkelMain::printMenu()
@@ -48,19 +47,14 @@ void MerkelMain::printHelp()
 
 void MerkelMain::printMarketStats()
 {
-  std::cout << "Order book contains : " << orders.size() << " orders." << std::endl;
-  unsigned int bids = 0;
-  unsigned int asks = 0;
-
-  for (OrderBookEntry obe : orders)
+  for (std::string const product : orderBook.getKnownProducts())
   {
-    if (obe.orderType == OrderBookType::bid)
-      ++bids;
-    if (obe.orderType == OrderBookType::ask)
-      ++asks;
+    std::cout << "Product: " << product << std::endl;
+    std::vector<OrderBookEntry> obes = orderBook.getOrders(OrderBookType::ask, product, "2020/03/17 17:01:24.884492");
+    std::cout << "Asks seen: " << obes.size() << std::endl;
+    std::cout << "Max ask: " << OrderBook::getHighPrice(obes) << std::endl;
+    std::cout << "Min ask: " << OrderBook::getLowPrice(obes) << std::endl;
   }
-  std::cout << "Order book contains : " << bids << " bids." << std::endl;
-  std::cout << "Order book contains : " << asks << " asks." << std::endl;
 }
 
 void MerkelMain::enterOffer()
