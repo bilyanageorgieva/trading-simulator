@@ -58,3 +58,64 @@ double OrderBook::getLowPrice(std::vector<OrderBookEntry>& orders)
   }
   return min;
 }
+
+std::string OrderBook::getEarliestTime()
+{
+  return orders[0].timestamp;
+}
+
+std::string OrderBook::getNextTime(std::string timestamp)
+{
+  for (OrderBookEntry& e : orders)
+  {
+    if(e.timestamp > timestamp)
+      return e.timestamp;
+  }
+
+  return getEarliestTime();
+}
+
+void OrderBook::insertOrder(OrderBookEntry& order)
+{
+  orders.push_back(order);
+  std::sort(orders.begin(), orders.end(), OrderBookEntry::compareByTimestamp);
+}
+
+std::vector<OrderBookEntry> OrderBook::matchAsksToBids(std::string product, std::string timestamp)
+{
+  std::vector<OrderBookEntry> asks, bids, sales;
+  for (OrderBookEntry obe : orders)
+  {
+    if(obe.timestamp != timestamp || obe.product != product)
+      continue;
+    if (obe.orderType == OrderBookType::ask)
+      asks.push_back(obe);
+    if (obe.orderType == OrderBookType::bid)
+      bids.push_back(obe);
+  }
+
+  for (OrderBookEntry& ask : asks)
+  {
+    for (OrderBookEntry& bid : bids)
+    {
+      if (bid.price < ask.price)
+        continue; // we don't have a match
+
+      if (bid.amount >= ask.amount) // ask is completely gone slice the bid, bid might or might not be cleared out
+      {
+        OrderBookEntry sale = OrderBookEntry(ask.price, ask.amount, timestamp, product, OrderBookType::sale);
+        sales.push_back(sale);
+        bid.amount -= ask.amount; // make sure this bid is processed correctly again if needed
+        break; // go to next ask
+      }
+      else 
+      {
+        OrderBookEntry sale = OrderBookEntry(ask.price, bid.amount, timestamp, product, OrderBookType::sale);
+        sales.push_back(sale);
+        ask.amount -= bid.amount;
+        bid.amount = 0; // make sure this bid is not processed again
+      }
+    }
+  }
+  return sales;
+}

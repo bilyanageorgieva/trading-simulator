@@ -15,4 +15,4 @@ OrderBookType OrderBookEntry::stringToOrderBookType(std::string s)
     return OrderBookType::bid;
   else
     return OrderBookType::unknown;
-}
+};

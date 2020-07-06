@@ -52,6 +52,26 @@ std::vector<std::string> CSVReader::tokenise(std::string csvLine, char separator
   return tokens;
 }
 
+OrderBookEntry CSVReader::stringsToOBE(std::string priceString, std::string amountString, std::string timestamp, std::string product, OrderBookType type)
+{
+  double price, amount;
+
+  try
+  {
+    price = std::stod(priceString);
+    amount = std::stod(amountString);
+  }
+  catch (const std::exception &e)
+  {
+    std::cout << "Bad float!" << std::endl;
+    throw;
+  }
+
+  OrderBookEntry obe {price, amount, timestamp, product, type};
+  return obe;
+}
+
+
 OrderBookEntry CSVReader::stringsToOBE(std::vector<std::string> tokens)
 {
   if (tokens.size() != 5)
@@ -60,19 +80,5 @@ OrderBookEntry CSVReader::stringsToOBE(std::vector<std::string> tokens)
     throw std::exception{};
   }
 
-  double price, amount;
-
-  try
-  {
-    price = std::stod(tokens[3]);
-    amount = std::stod(tokens[4]);
-  }
-  catch (const std::exception &e)
-  {
-    std::cout << "Bad float!" << std::endl;
-    throw;
-  }
-
-  OrderBookEntry obe {price, amount, tokens[0], tokens[1], OrderBookEntry::stringToOrderBookType(tokens[2])};
-  return obe;
+  return stringsToOBE(tokens[3], tokens[4], tokens[0], tokens[1], OrderBookEntry::stringToOrderBookType(tokens[2]));
 }
