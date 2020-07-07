@@ -14,14 +14,7 @@ MerkelMain::MerkelMain()
 void MerkelMain::init()
 {
   currentTime = orderBook.getEarliestTime();
-
   loadOrderBook();
-  while (true)
-  {
-    printMenu();
-    int userOption = getUserOption();
-    processUserOption(userOption);
-  }
 }
 
 void MerkelMain::loadOrderBook()

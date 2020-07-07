@@ -2,6 +2,7 @@
 #include "CSVReader.h"
 #include <set>
 #include <iostream>
+#include "TradingBot.h"
 
 /** construct, reading a csv data file*/
 OrderBook::OrderBook(std::string filename)
@@ -113,6 +114,11 @@ std::vector<OrderBookEntry> OrderBook::matchAsksToBids(std::string product, std:
       bids.push_back(obe);
   }
 
+  // sort asks lowest first
+  std::sort(asks.begin(), asks.end(), OrderBookEntry::compareByPriceAsc);
+  // sort bids highest first
+  std::sort(bids.begin(), bids.end(), OrderBookEntry::compareByPriceDesc);
+
   for (OrderBookEntry& ask : asks)
   {
     for (OrderBookEntry& bid : bids)
@@ -120,36 +126,28 @@ std::vector<OrderBookEntry> OrderBook::matchAsksToBids(std::string product, std:
       if (bid.price < ask.price || bid.amount <= 0)
         continue; // we don't have a match
 
+      OrderBookEntry sale = OrderBookEntry(ask.price, 0, timestamp, product, OrderBookType::unknown);
+      if (bid.username == TradingBot::USERNAME)
+      {
+        sale.username = TradingBot::USERNAME;
+        sale.orderType = OrderBookType::bidsale;
+      }
+      if (ask.username == TradingBot::USERNAME)
+      {
+        sale.username = TradingBot::USERNAME;
+        sale.orderType = OrderBookType::asksale;
+      }
+
       if (bid.amount >= ask.amount) // ask is completely gone slice the bid, bid might or might not be cleared out
       {
-        OrderBookEntry sale = OrderBookEntry(ask.price, ask.amount, timestamp, product, OrderBookType::asksale);
-        if (bid.username == "simuser")
-        {
-          sale.username = "simuser";
-          sale.orderType = OrderBookType::bidsale;
-        }
-        if (ask.username == "simuser")
-        {
-          sale.username = "simuser";
-          sale.orderType = OrderBookType::asksale;
-        }
+        sale.amount = ask.amount;
         sales.push_back(sale);
         bid.amount -= ask.amount; // make sure this bid is processed correctly again if needed
         break; // go to next ask
       }
-      else // bid is completely gone, slece the ask
+      else // bid is completely gone, slice the ask
       {
-        OrderBookEntry sale = OrderBookEntry(ask.price, bid.amount, timestamp, product, OrderBookType::asksale);
-        if (bid.username == "simuser")
-        {
-          sale.username = "simuser";
-          sale.orderType = OrderBookType::bidsale;
-        }
-        if (ask.username == "simuser")
-        {
-          sale.username = "simuser";
-          sale.orderType = OrderBookType::asksale;
-        }
+        sale.amount = bid.amount;
         sales.push_back(sale);
         ask.amount -= bid.amount;
         bid.amount = 0; // make sure this bid is not processed again

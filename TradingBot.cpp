@@ -12,11 +12,15 @@ TradingBot::TradingBot(MerkelMain& _tradingPlatform, std::string _baseCurrency, 
   wallet.insertCurrency(_baseCurrency, amount);
 }
 
-void TradingBot::init()
+void TradingBot::trade()
 {
   while(true)
   {
-    //do something
+    //1. Update wallet from the transactions in the previous timeframe
+    updateWallet();
+
+    //2. check the current situation and the past entries and generate the correct orders
+    generateOrders();
   }
 }
 
@@ -57,6 +61,7 @@ void TradingBot::generateOrder(double amount, std::string product, double price,
   if (wallet.canFulfillOrder(obe))
   {
     tradingPlatform.orderBook.insertOrder(obe);
+    orders.push_back(obe);
     std::cout << "Wallet looks good." << std::endl;
   }
   else
@@ -73,7 +78,23 @@ void TradingBot::generateAsk(double amount, std::string product, double price)
   generateOrder(amount, product, price, OrderBookType::ask);
 }
 
-void TradingBot::updateWallet(OrderBookEntry& sale)
+void TradingBot::updateWallet()
 {
-  wallet.processSale(sale);
+  std::string previousTimestamp = tradingPlatform.orderBook.getPreviousTime(tradingPlatform.currentTime);
+  if (tradingPlatform.salesByTimestmap.count(previousTimestamp))
+  {
+    for (OrderBookEntry sale : tradingPlatform.salesByTimestmap[previousTimestamp])
+    {
+      if (sale.username == USERNAME)
+      {
+        wallet.processSale(sale);
+        sales.push_back(sale);
+      }
+    }
+  }
+}
+
+void TradingBot::generateOrders()
+{
+
 }

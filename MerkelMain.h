@@ -11,6 +11,8 @@ class MerkelMain
     MerkelMain();
     /** Call this to start the simulator */
     void init();
+    void goToNextTimeframe();
+
     std::string currentTime;
     OrderBook orderBook{"trading.csv"};
     std::map<std::string, std::vector<OrderBookEntry>> salesByTimestmap;
@@ -21,7 +23,6 @@ class MerkelMain
     void printMenu();
     void printHelp();
     void printMarketStats();
-    void goToNextTimeframe();
     int getUserOption();
     void processUserOption(int userOption);
 };
