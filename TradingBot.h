@@ -15,18 +15,17 @@ class TradingBot
     void logWalletContents();
     void logBidsAndAsks();
     void logSales();
-    void printWallet();
 
     static const std::string USERNAME;
 
   private:
-    void generateOrder(double amount, std::string product, double price, OrderBookType type);
-    void generateBid(double amount, std::string product, double price);
-    void generateAsk(double amount, std::string product, double price);
-    void generateOrders();
     void updateWallet();
+    double calculateMeanPrice(std::vector<OrderBookEntry>& orders);
+    double calculateMaxPrice(std::vector<OrderBookEntry>& orders);
+    void generateOrder(double amount, std::string product, double price, OrderBookType type);
+    void generateOrder(std::string product);
 
-    MerkelMain &tradingPlatform;
+    MerkelMain& tradingPlatform;
     std::string baseCurrency;
     Wallet wallet;
     std::vector<OrderBookEntry> orders;

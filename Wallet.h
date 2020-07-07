@@ -18,6 +18,8 @@ class Wallet
 
     /** Check if the wallet contains this amount of the currency or more */
     bool containsCurrency(std::string type, double amount);
+    
+    double getBalance(std::string currency);
 
     /** Check if the wallet can cope with this ask or bid */
     bool canFulfillOrder(OrderBookEntry order);
@@ -33,6 +35,6 @@ class Wallet
 
     /** Process a bid sale of the user */
     void processBidSale(OrderBookEntry& sale);
-    
+
     std::map<std::string, double> currencies;
 };

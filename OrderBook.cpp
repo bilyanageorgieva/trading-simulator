@@ -24,6 +24,20 @@ std::vector<std::string> OrderBook::getKnownProducts()
   return products;
 }
 
+std::vector<std::string> OrderBook::getKnownProducts(std::string timestamp)
+{
+  std::set<std::string> productSet;
+
+  for (OrderBookEntry& entry : orders)
+  {
+    if (entry.timestamp == timestamp)
+      productSet.insert(entry.product);
+  }
+
+  std::vector<std::string> products(productSet.begin(), productSet.end());
+  return products;
+}
+
 /** return vector of entries according to the sent filters*/
 std::vector<OrderBookEntry> OrderBook::getOrders(OrderBookType type, std::string product, std::string timestamp)
 {

@@ -32,10 +32,7 @@ bool Wallet::removeCurrency(std::string type, double amount)
 
 bool Wallet::containsCurrency(std::string type, double amount)
 {
-  if (currencies.count(type) == 0)
-    return false;
-  else
-    return currencies[type] >= amount;
+  return getBalance(type) >= amount;
 }
 
 bool Wallet::canFulfillOrder(OrderBookEntry order)
@@ -56,6 +53,14 @@ bool Wallet::canFulfillOrder(OrderBookEntry order)
     return containsCurrency(currency, amount);
   }
   return false;
+}
+
+double Wallet::getBalance(std::string currency)
+{
+  if (currencies.count(currency) == 0)
+    return 0;
+  else
+    return currencies[currency];
 }
 
 void Wallet::processAskSale(OrderBookEntry& sale)

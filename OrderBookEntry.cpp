@@ -1,4 +1,6 @@
 #include "OrderBookEntry.h"
+#include <iomanip>
+#include <sstream>
 
 OrderBookEntry::OrderBookEntry(double price,
                                double amount,
@@ -40,5 +42,11 @@ std::string OrderBookEntry::toString()
     break;
   }
 
-  return timestamp + " Type: " + type + " Product: " + product + " Price: " + std::to_string(price) + " Amount: " + std::to_string(amount);
+  std::stringstream amount_stream;
+  amount_stream << std::fixed << std::setprecision(8) << amount;
+
+  std::stringstream price_stream;
+  price_stream << std::fixed << std::setprecision(8) << price;
+
+  return timestamp + " Type: " + type + " Product: " + product + " Price: " + price_stream.str() + " Amount: " + amount_stream.str() + " Username: " + username;
 }
