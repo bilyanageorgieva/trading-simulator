@@ -21,6 +21,8 @@ public:
                  OrderBookType orderType,
                  std::string username = "dataset");
 
+  std::string toString();
+
   static OrderBookType stringToOrderBookType(std::string s);
 
   static bool compareByTimestamp(OrderBookEntry& e1, OrderBookEntry& e2)

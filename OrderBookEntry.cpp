@@ -16,4 +16,29 @@ OrderBookType OrderBookEntry::stringToOrderBookType(std::string s)
     return OrderBookType::bid;
   else
     return OrderBookType::unknown;
-};
+}
+
+std::string OrderBookEntry::toString()
+{
+  std::string type;
+  switch (orderType)
+  {
+  case OrderBookType::bid:
+    type = "Bid";
+    break;
+  case OrderBookType::ask:
+    type = "Ask";
+    break;
+  case OrderBookType::bidsale:
+    type = "Bid sale";
+    break;
+  case OrderBookType::asksale:
+    type = "Ask sale";
+    break;
+  default:
+    type = "Unknown";
+    break;
+  }
+
+  return timestamp + " Type: " + type + " Product: " + product + " Price: " + std::to_string(price) + " Amount: " + std::to_string(amount);
+}

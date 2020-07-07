@@ -67,10 +67,8 @@ void Wallet::processAskSale(OrderBookEntry& sale)
   double incomingAmount = sale.amount * sale.price;
   std::string incomingCurrency = currs[1];
 
-  // insertCurrency(incomingCurrency, incomingAmount);
-  // removeCurrency(outgoingCurrency, outgoingAmount)
-
-  currencies[incomingCurrency] += incomingAmount;
+  insertCurrency(incomingCurrency, incomingAmount);
+  // removeCurrency(outgoingCurrency, outgoingAmount);
   currencies[outgoingCurrency] -= outgoingAmount;
 }
 
@@ -83,12 +81,18 @@ void Wallet::processBidSale(OrderBookEntry& sale)
   double outgoingAmount = sale.amount * sale.price;
   std::string outgoingCurrency = currs[1];
 
-  // insertCurrency(incomingCurrency, incomingAmount);
-  // removeCurrency(outgoingCurrency, outgoingAmount)
-
-  currencies[incomingCurrency] += incomingAmount;
+  insertCurrency(incomingCurrency, incomingAmount);
+  // removeCurrency(outgoingCurrency, outgoingAmount);
   currencies[outgoingCurrency] -= outgoingAmount;
   
+}
+
+void Wallet::processSale(OrderBookEntry& sale)
+{
+  if (sale.orderType == OrderBookType::bidsale)
+    processBidSale(sale);
+  if (sale.orderType == OrderBookType::asksale)
+    processAskSale(sale);
 }
 
 std::string Wallet::toString()

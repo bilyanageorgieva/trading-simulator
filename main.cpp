@@ -1,13 +1,13 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "OrderBookEntry.h"
 #include "MerkelMain.h"
-#include "CSVReader.h"
-#include "Wallet.h"
+#include "TradingBot.h"
+
 
 int main()
 {
   MerkelMain app{};
   app.init();
+  TradingBot bot = TradingBot(app, "BTC", 10);
 }

@@ -11,21 +11,17 @@ class MerkelMain
     MerkelMain();
     /** Call this to start the simulator */
     void init();
+    std::string currentTime;
+    OrderBook orderBook{"trading.csv"};
+    std::map<std::string, std::vector<OrderBookEntry>> salesByTimestmap;
+
   
   private:
     void loadOrderBook();
     void printMenu();
     void printHelp();
     void printMarketStats();
-    void enterAsk();
-    void enterBid();
-    void printWallet();
     void goToNextTimeframe();
     int getUserOption();
     void processUserOption(int userOption);
-    void processSale(OrderBookEntry& sale);
-
-    std::string currentTime;
-    OrderBook orderBook{"trading.csv"};
-    Wallet wallet;
 };

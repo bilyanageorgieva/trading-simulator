@@ -22,15 +22,17 @@ class Wallet
     /** Check if the wallet can cope with this ask or bid */
     bool canFulfillOrder(OrderBookEntry order);
 
-    /** Process an ask sale of the user */
-    void processAskSale(OrderBookEntry& sale);
-
-    /** Process a bid sale of the user */
-    void processBidSale(OrderBookEntry& sale);
+    void processSale(OrderBookEntry& sale);
 
     /** Generate the string representation of the wallet */
     std::string toString();
 
   private:
+    /** Process an ask sale of the user */
+    void processAskSale(OrderBookEntry& sale);
+
+    /** Process a bid sale of the user */
+    void processBidSale(OrderBookEntry& sale);
+    
     std::map<std::string, double> currencies;
 };

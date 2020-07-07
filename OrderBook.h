@@ -15,9 +15,11 @@ class OrderBook
     std::vector<OrderBookEntry> getOrders(OrderBookType type, std::string product, std::string timestamp);
   /** returns the earliest time in the orderbook*/  
     std::string getEarliestTime();
+    std::string getLatestTime();
   /** returns the next time after the sent time in the orderbook
    * If there is no next timestamp, wraps around and returns the earliest time.*/ 
     std::string getNextTime(std::string timestamp);
+    std::string getPreviousTime(std::string timestamp);
 
     void insertOrder(OrderBookEntry& order);
 

@@ -64,6 +64,11 @@ std::string OrderBook::getEarliestTime()
   return orders[0].timestamp;
 }
 
+std::string OrderBook::getLatestTime()
+{
+  return orders[orders.size() - 1].timestamp;
+}
+
 std::string OrderBook::getNextTime(std::string timestamp)
 {
   for (OrderBookEntry& e : orders)
@@ -73,6 +78,20 @@ std::string OrderBook::getNextTime(std::string timestamp)
   }
 
   return getEarliestTime();
+}
+
+std::string OrderBook::getPreviousTime(std::string timestamp)
+{
+  std::string previousTimestamp = "";
+  for (OrderBookEntry &e : orders)
+  {
+    if(e.timestamp < timestamp)
+      previousTimestamp = e.timestamp;
+    else
+      break;
+  }
+
+  return (previousTimestamp != "") ? previousTimestamp : getLatestTime();
 }
 
 void OrderBook::insertOrder(OrderBookEntry& order)
