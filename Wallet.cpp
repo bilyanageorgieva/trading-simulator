@@ -58,6 +58,39 @@ bool Wallet::canFulfillOrder(OrderBookEntry order)
   return false;
 }
 
+void Wallet::processAskSale(OrderBookEntry& sale)
+{
+  std::vector<std::string> currs = CSVReader::tokenise(sale.product, '/');
+
+  double outgoingAmount = sale.amount;
+  std::string outgoingCurrency = currs[0];
+  double incomingAmount = sale.amount * sale.price;
+  std::string incomingCurrency = currs[1];
+
+  // insertCurrency(incomingCurrency, incomingAmount);
+  // removeCurrency(outgoingCurrency, outgoingAmount)
+
+  currencies[incomingCurrency] += incomingAmount;
+  currencies[outgoingCurrency] -= outgoingAmount;
+}
+
+void Wallet::processBidSale(OrderBookEntry& sale)
+{
+  std::vector<std::string> currs = CSVReader::tokenise(sale.product, '/');
+
+  double incomingAmount = sale.amount;
+  std::string incomingCurrency = currs[0];
+  double outgoingAmount = sale.amount * sale.price;
+  std::string outgoingCurrency = currs[1];
+
+  // insertCurrency(incomingCurrency, incomingAmount);
+  // removeCurrency(outgoingCurrency, outgoingAmount)
+
+  currencies[incomingCurrency] += incomingAmount;
+  currencies[outgoingCurrency] -= outgoingAmount;
+  
+}
+
 std::string Wallet::toString()
 {
   std::string s;
@@ -68,4 +101,10 @@ std::string Wallet::toString()
     s += currency + " : " + std::to_string(amount) + "\n";
   }
   return s;
+}
+
+std::ostream& operator<<(std::ostream& os,  Wallet& wallet)
+{
+    os << wallet.toString();
+    return os;
 }

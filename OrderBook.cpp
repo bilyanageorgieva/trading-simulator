@@ -98,19 +98,39 @@ std::vector<OrderBookEntry> OrderBook::matchAsksToBids(std::string product, std:
   {
     for (OrderBookEntry& bid : bids)
     {
-      if (bid.price < ask.price)
+      if (bid.price < ask.price || bid.amount <= 0)
         continue; // we don't have a match
 
       if (bid.amount >= ask.amount) // ask is completely gone slice the bid, bid might or might not be cleared out
       {
-        OrderBookEntry sale = OrderBookEntry(ask.price, ask.amount, timestamp, product, OrderBookType::sale);
+        OrderBookEntry sale = OrderBookEntry(ask.price, ask.amount, timestamp, product, OrderBookType::asksale);
+        if (bid.username == "simuser")
+        {
+          sale.username = "simuser";
+          sale.orderType = OrderBookType::bidsale;
+        }
+        if (ask.username == "simuser")
+        {
+          sale.username = "simuser";
+          sale.orderType = OrderBookType::asksale;
+        }
         sales.push_back(sale);
         bid.amount -= ask.amount; // make sure this bid is processed correctly again if needed
         break; // go to next ask
       }
-      else 
+      else // bid is completely gone, slece the ask
       {
-        OrderBookEntry sale = OrderBookEntry(ask.price, bid.amount, timestamp, product, OrderBookType::sale);
+        OrderBookEntry sale = OrderBookEntry(ask.price, bid.amount, timestamp, product, OrderBookType::asksale);
+        if (bid.username == "simuser")
+        {
+          sale.username = "simuser";
+          sale.orderType = OrderBookType::bidsale;
+        }
+        if (ask.username == "simuser")
+        {
+          sale.username = "simuser";
+          sale.orderType = OrderBookType::asksale;
+        }
         sales.push_back(sale);
         ask.amount -= bid.amount;
         bid.amount = 0; // make sure this bid is not processed again

@@ -23,6 +23,7 @@ class MerkelMain
     void goToNextTimeframe();
     int getUserOption();
     void processUserOption(int userOption);
+    void processSale(OrderBookEntry& sale);
 
     std::string currentTime;
     OrderBook orderBook{"trading.csv"};
