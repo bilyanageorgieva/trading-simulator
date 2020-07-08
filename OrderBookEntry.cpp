@@ -1,4 +1,5 @@
 #include "OrderBookEntry.h"
+#include <string>
 #include <iomanip>
 #include <sstream>
 
@@ -10,11 +11,11 @@ OrderBookEntry::OrderBookEntry(double price,
                                std::string username)
     : price(price), amount(amount), timestamp(timestamp), product(product), orderType(orderType), username(username){};
 
-OrderBookType OrderBookEntry::stringToOrderBookType(std::string s)
+OrderBookType OrderBookEntry::stringToOrderBookType(std::string str)
 {
-  if (s == "ask")
+  if (str == "ask")
     return OrderBookType::ask;
-  if (s == "bid")
+  if (str == "bid")
     return OrderBookType::bid;
   else
     return OrderBookType::unknown;
@@ -22,23 +23,24 @@ OrderBookType OrderBookEntry::stringToOrderBookType(std::string s)
 
 std::string OrderBookEntry::toString()
 {
-  std::string type;
+  std::string typeString;
+
   switch (orderType)
   {
   case OrderBookType::bid:
-    type = "Bid";
+    typeString = "Bid";
     break;
   case OrderBookType::ask:
-    type = "Ask";
+    typeString = "Ask";
     break;
   case OrderBookType::bidsale:
-    type = "Bid sale";
+    typeString = "Bid sale";
     break;
   case OrderBookType::asksale:
-    type = "Ask sale";
+    typeString = "Ask sale";
     break;
   default:
-    type = "Unknown";
+    typeString = "Unknown";
     break;
   }
 
@@ -48,5 +50,20 @@ std::string OrderBookEntry::toString()
   std::stringstream price_stream;
   price_stream << std::fixed << std::setprecision(8) << price;
 
-  return timestamp + " Type: " + type + " Product: " + product + " Price: " + price_stream.str() + " Amount: " + amount_stream.str() + " Username: " + username;
+  return timestamp + " Type: " + typeString + " Product: " + product + " Price: " + price_stream.str() + " Amount: " + amount_stream.str() + " Username: " + username;
+}
+
+bool OrderBookEntry::compareByTimestamp(OrderBookEntry& e1, OrderBookEntry& e2)
+{
+  return e1.timestamp < e2.timestamp;
+}
+
+bool OrderBookEntry::compareByPriceAsc(OrderBookEntry& e1, OrderBookEntry& e2)
+{
+  return e1.price < e2.price;
+}
+
+bool OrderBookEntry::compareByPriceDesc(OrderBookEntry& e1, OrderBookEntry& e2)
+{
+  return e1.price > e2.price;
 }

@@ -35,7 +35,7 @@ bool Wallet::containsCurrency(std::string type, double amount)
   return getBalance(type) >= amount;
 }
 
-bool Wallet::canFulfillOrder(OrderBookEntry order)
+bool Wallet::canFulfillOrder(OrderBookEntry& order)
 {
   std::vector<std::string> currs = CSVReader::tokenise(order.product, '/');
   if (order.orderType == OrderBookType::ask)

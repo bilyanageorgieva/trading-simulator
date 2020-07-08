@@ -8,37 +8,12 @@
 
 MerkelMain::MerkelMain()
 {
-
+  init();
 }
 
 void MerkelMain::init()
 {
   currentTime = orderBook.getEarliestTime();
-  loadOrderBook();
-}
-
-void MerkelMain::loadOrderBook()
-{
-}
-
-void MerkelMain::printMenu()
-{
-  // print menu
-  std::cout << "1: Print help" << std::endl;
-  std::cout << "2: Print exchange stats" << std::endl;
-  std::cout << "3: Make an offer" << std::endl;
-  std::cout << "4: Make a bid" << std::endl;
-  std::cout << "5: Continue" << std::endl;
-
-  // prompt user to select an option
-  std::cout << "===================== " << std::endl;
-  std::cout << "Current time is " << currentTime << std::endl;
-  std::cout << "Type in 1-5" << std::endl;
-}
-
-void MerkelMain::printHelp()
-{
-  std::cout << "Help - your aim is to make money. Analyze the market and make bids and offers." << std::endl;
 }
 
 void MerkelMain::printMarketStats()
@@ -59,7 +34,7 @@ void MerkelMain::goToNextTimeframe()
   std::vector<OrderBookEntry> successfulSales;
   for (std::string &p : orderBook.getKnownProducts())
   {
-    std::cout << "matching " << p << std::endl;
+    std::cout << "Matching " << p << std::endl;
     std::vector<OrderBookEntry> sales = orderBook.matchAsksToBids(p, currentTime);
     std::cout << "Sales: " << sales.size() << std::endl;
     for (OrderBookEntry& sale : sales)
@@ -71,40 +46,4 @@ void MerkelMain::goToNextTimeframe()
 
   salesByTimestmap[currentTime] = successfulSales;
   currentTime = orderBook.getNextTime(currentTime);
-}
-
-int MerkelMain::getUserOption()
-{
-  int userOption = 0;
-  std::string line;
-  std::getline(std::cin, line);
-  try
-  {
-    userOption = std::stoi(line);
-    std::cout << "You chose: " << userOption << std::endl;
-  }
-  catch(const std::exception& e)
-  {
-    //
-  }
-  return userOption;
-}
-
-void MerkelMain::processUserOption(int userOption)
-{
-  switch (userOption)
-  {
-  case 1:
-    printHelp();
-    break;
-  case 2:
-    printMarketStats();
-    break;
-  case 5:
-    goToNextTimeframe();
-    break;
-  default:
-    std::cout << "Invalid choice. Choose 1-5" << std::endl;
-    break;
-  }
 }

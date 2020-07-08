@@ -9,13 +9,29 @@
 class TradingBot
 {
   public:
-    TradingBot(MerkelMain& _tradingPlatform, std::string _baseCurrency, double amount);
-
+    /**
+     * Initializes a new instance.
+     * 
+     * @param _tradingPlatform the MerkelMain trading platform on which the bot should trade
+     * @param currency the initial currency that the bot will have in its wallet
+     * @param amount the initial amount that the bot will have in its wallet
+     * @return a new TradingBot instance
+    */
+    TradingBot(MerkelMain& _tradingPlatform, std::string currency, double amount);
+    
+    /** The bot places all of its bids and asks for the current timestamp */
     void trade();
+
+    /** The bot logs all the contents of its wallet */
     void logWalletContents();
+
+    /** The bot logs all of its bids and asks */
     void logBidsAndAsks();
+
+    /** The bot logs all of the sales it took part in */
     void logSales();
 
+    /** The username that the bot will use for his offers */     
     static const std::string USERNAME;
 
   private:
@@ -26,7 +42,6 @@ class TradingBot
     void generateOrder(std::string product);
 
     MerkelMain& tradingPlatform;
-    std::string baseCurrency;
     Wallet wallet;
     std::vector<OrderBookEntry> orders;
     std::vector<OrderBookEntry> sales;

@@ -5,11 +5,11 @@
 
 const std::string TradingBot::USERNAME = "TradingBot";
 
-TradingBot::TradingBot(MerkelMain& _tradingPlatform, std::string _baseCurrency, double amount)
-  : tradingPlatform(_tradingPlatform), baseCurrency(_baseCurrency)
+TradingBot::TradingBot(MerkelMain& _tradingPlatform, std::string currency, double amount)
+  : tradingPlatform(_tradingPlatform)
 {
   wallet = Wallet();
-  wallet.insertCurrency(_baseCurrency, amount);
+  wallet.insertCurrency(currency, amount);
 }
 
 void TradingBot::trade()
